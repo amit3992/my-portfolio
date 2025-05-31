@@ -28,7 +28,7 @@ function App() {
                 </a>
               </div>
               <div className="mt-4">
-                <a href="/Resume_Amit_Kulkarni_2025.pdf" className="text-gray-500 hover:text-gray-900">
+                <a href="https://docs.google.com/document/d/1T9G5AsyDaZsPm8cY-LUAbvykWliwLUfOkj0g0SppuTs/edit?tab=t.0" target='_blank' className="text-gray-500 hover:text-gray-900">
                   Download Resume
                 </a>
               </div>
