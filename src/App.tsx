@@ -20,11 +20,16 @@ function App() {
                   <Mail className="w-5 h-5 mr-2" />
                   <span>contact@amitpk.com</span>
                 </a>
-                <a href="https://linkedin.com/in/amitpk" className="text-gray-600 hover:text-gray-900">
+                <a href="https://www.linkedin.com/in/amit3992/" className="text-gray-600 hover:text-gray-900">
                   <Linkedin className="w-5 h-5" />
                 </a>
-                <a href="https://github.com/amitpk" className="text-gray-600 hover:text-gray-900">
+                <a href="https://github.com/amit3992" className="text-gray-600 hover:text-gray-900">
                   <Github className="w-5 h-5" />
+                </a>
+              </div>
+              <div className="mt-4">
+                <a href="/Resume_Amit_Kulkarni_2025.pdf" className="text-gray-500 hover:text-gray-900">
+                  Download Resume
                 </a>
               </div>
             </div>
@@ -49,7 +54,7 @@ function App() {
             <div className="bg-gray-50 rounded-lg p-8 shadow-sm">
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Financing as a Service (FaaS)</h3>
               <p className="text-gray-600 mb-4">
-                Led the implementation of a scalable microservices platform handling $2B+ in annual transaction volume.
+                Led the implementation of a scalable microservices that power Intuit's Financing as a service (FaaS) product handling $2B+ in annual transaction volume.
               </p>
               <ul className="text-gray-600 space-y-2">
                 <li>• Reduced system latency by 40%</li>
@@ -98,7 +103,7 @@ function App() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-white rounded-lg p-4 shadow-sm">
                   <h4 className="font-medium text-gray-900">Languages</h4>
-                  <p className="text-gray-600">Java, Python, JavaScript</p>
+                  <p className="text-gray-600">Java, Python, Kotlin, Typescript</p>
                 </div>
                 <div className="bg-white rounded-lg p-4 shadow-sm">
                   <h4 className="font-medium text-gray-900">Cloud & Infrastructure</h4>
@@ -110,7 +115,7 @@ function App() {
                 </div>
                 <div className="bg-white rounded-lg p-4 shadow-sm">
                   <h4 className="font-medium text-gray-900">Frameworks</h4>
-                  <p className="text-gray-600">Spring Boot, Django, React</p>
+                  <p className="text-gray-600">SpringBoot, Django, React</p>
                 </div>
               </div>
             </div>
@@ -137,11 +142,6 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
             <p className="text-gray-500">© 2025 Amit Kulkarni. All rights reserved.</p>
-            <div className="flex space-x-6">
-              <a href="/Resume_Amit_Kulkarni_2025.pdf" className="text-gray-500 hover:text-gray-900">
-                Download Resume
-              </a>
-            </div>
           </div>
         </div>
       </footer>
