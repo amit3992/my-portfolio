@@ -18,7 +18,7 @@ function App() {
               <div className="flex space-x-4">
                 <a href="mailto:amit3992@gmail.com" className="flex items-center text-gray-600 hover:text-gray-900">
                   <Mail className="w-5 h-5 mr-2" />
-                  <span>contact@amitpk.com</span>
+                  <span>amit3992@gmail.com</span>
                 </a>
                 <a href="https://www.linkedin.com/in/amit3992/" className="text-gray-600 hover:text-gray-900">
                   <Linkedin className="w-5 h-5" />
