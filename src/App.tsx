@@ -16,7 +16,7 @@ function App() {
                 and leading high-impact technical initiatives. Expert in Java, Python, AWS, and distributed systems architecture.
               </p>
               <div className="flex space-x-4">
-                <a href="mailto:contact@amitpk.com" className="flex items-center text-gray-600 hover:text-gray-900">
+                <a href="mailto:amit3992@gmail.com" className="flex items-center text-gray-600 hover:text-gray-900">
                   <Mail className="w-5 h-5 mr-2" />
                   <span>contact@amitpk.com</span>
                 </a>
@@ -104,6 +104,10 @@ function App() {
                 <div className="bg-white rounded-lg p-4 shadow-sm">
                   <h4 className="font-medium text-gray-900">Languages</h4>
                   <p className="text-gray-600">Java, Python, Kotlin, Typescript</p>
+                </div>
+                <div className="bg-white rounded-lg p-4 shadow-sm">
+                  <h4 className="font-medium text-gray-900">AI & LLMs</h4>
+                  <p className="text-gray-600">Retrieval-Augmented Generation (RAG), LLM integration, prompt engineering, semantic search</p>
                 </div>
                 <div className="bg-white rounded-lg p-4 shadow-sm">
                   <h4 className="font-medium text-gray-900">Cloud & Infrastructure</h4>
