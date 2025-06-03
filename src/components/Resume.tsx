@@ -42,6 +42,14 @@ const Resume: React.FC = () => {
       <li>Championed operational excellence initiatives to maintain 99.9% uptime during peak tax season</li>
               </ul>
             </div>
+            <div className="role">
+              <h3>Software Engineer @ Ericsson</h3>
+              <p className="subtitle">Chargind Node Automation · 2016-2018</p>
+              <ul>
+              <li>Designed and delivered a Spring Boot automation tool that converted Excel-based telecom orders to XML, reducing order processing time from 1 week to 5 hours</li>
+    <li>Led end-to-end automation of catalog configuration and deployment, improving delivery speed by 40% and accelerating time-to-market for major customer projects</li>
+              </ul>
+            </div>
           </section>
 
           <section className="resume-section">
@@ -69,7 +77,7 @@ const Resume: React.FC = () => {
     <div className="impact-card">
       <h3>Engineering Interview Revamp</h3>
       <ul>
-        <li>Redesigned Intuit’s A4A interview process to focus on real-world engineering skills</li>
+        <li>Redesigned Intuit’s engineering interview process to focus on real-world engineering skills</li>
         <li>Developed LLM-powered craft projects adopted across multiple engineering domains</li>
         <li>Launched public GitHub org for interview exercises, improving candidate transparency and prep</li>
         <li>Improved candidate NPS and assessor signal accuracy</li>
