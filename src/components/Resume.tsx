@@ -27,7 +27,7 @@ const Resume: React.FC = () => {
               <p className="subtitle">Emerging Products Group · 2022-Present</p>
               <ul>
               <li>Led backend development for Credit Karma’s Lightbox integration in QuickBooks, driving a 15% increase in financing sales</li>
-      <li>Designed seamless registration APIs with CK User Management, reducing signup friction and boosting new user registrations by 5%</li>
+      <li>Designed seamless registration APIs with Credit Karma User Management, reducing signup friction and boosting new user registrations by 5%</li>
       <li>Built a Financing AI Agent using RAG and LLMs to automate merchant outreach, resulting in a 20% uplift in estimate conversions</li>
       <li>Driving the externalization of "Financing as a Service" to third-party Independent Service Vendors.</li>
               </ul>
@@ -60,18 +60,18 @@ const Resume: React.FC = () => {
       <ul>
       <li>Founding engineer (#5) on the team — helped take a whiteboard concept to production in under 3 months</li>
         <li>20% increase in merchant sales conversion via AI-driven Financing Agent</li>
-        <li>5% lift in CK registrations through streamlined seamless user registration</li>
+        <li>5% lift in Credit Karma registrations through streamlined seamless user registration</li>
         <li>Reduced latency by 40% and achieved 99.99% uptime during peak usage</li>
       </ul>
     </div>
 
 
     <div className="impact-card">
-      <h3>Global App Marketplace</h3>
+      <h3>Global Quickbooks App Marketplace</h3>
       <ul>
-        <li>Growth in app integrations after launching unified marketplace</li>
-        <li>Real-time app updates reduced sync delays from 2 hours to minutes</li>
-        <li>Localized content in 11+ languages, deployed across multiple regions</li>
+        <li>10% growth in app integrations after leading the launch of unified app marketplace</li>
+        <li>Reduced app content sync delays from 2 hours to minutes using event-driven architecture</li>
+        <li>Localized app content in 11+ languages, deployed across multiple regions</li>
       </ul>
     </div>
     <div className="impact-card">
