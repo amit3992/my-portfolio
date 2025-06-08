@@ -38,8 +38,9 @@ I care about clarity, craft, and leaving systems — and people — better than 
           <h2>🌟 Also me</h2>
           <ul className="fun-facts">
             <li>Lifelong Manchester United supporter — for better or for worse.</li>
-            <li>A history nerd at heart. One of my favorite reads is Unruly by David Mitchell — a sharp, funny deep-dive into Britain’s royal chaos. </li>
+            <li>A history nerd at heart. One of my favorite reads is Unruly by David Mitchell — a sharp, funny deep-dive into Britain's royal chaos. </li>
             <li>Always curious, always tinkering — I love exploring new ideas, tools, and the occasional rabbit hole.</li>
+            <li>Currently learning A2 French with <a href="https://www.afscv.org/" target="_blank" rel="noopener noreferrer">Alliance Française Silicon Valley</a>.</li>
           </ul>
         </section>
 

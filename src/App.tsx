@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Github, Linkedin, Mail } from 'lucide-react';
 import About from './components/About';
 import Resume from './components/Resume';
+import Projects from './components/Projects';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
                 <Link to="/" className="text-gray-600 hover:text-gray-900">Home</Link>
                 <Link to="/about" className="text-gray-600 hover:text-gray-900">About</Link>
                 <Link to="/resume" className="text-gray-600 hover:text-gray-900">Resume</Link>
+                <Link to="/projects" className="text-gray-600 hover:text-gray-900">Projects</Link>
               </div>
             </div>
           </div>
@@ -23,6 +25,7 @@ function App() {
         <Routes>
           <Route path="/about" element={<About />} />
           <Route path="/resume" element={<Resume />} />
+          <Route path="/projects" element={<Projects />} />
           <Route path="/" element={
             <div>
       {/* Hero Section */}
