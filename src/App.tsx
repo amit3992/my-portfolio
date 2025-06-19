@@ -1,6 +1,6 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Github, Linkedin, Mail } from 'lucide-react';
+import { ChatBot } from './components/ChatBot';
 import About from './components/About';
 import Resume from './components/Resume';
 import Projects from './components/Projects';
@@ -81,6 +81,7 @@ function App() {
             </div>
           } />
         </Routes>
+        <ChatBot />
       </div>
     </Router>
   );
