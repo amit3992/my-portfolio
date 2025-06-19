@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { Maximize2, Minimize2, X } from 'lucide-react';
 
 interface Message {
   text: string;
@@ -27,6 +28,7 @@ const MAX_HEIGHT = 800;
 
 export const ChatBot = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -50,6 +52,43 @@ export const ChatBot = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Call greeting API when chat first opens
+  useEffect(() => {
+    if (isOpen && messages.length === 0) {
+      const fetchGreeting = async () => {
+        setIsLoading(true);
+        try {
+          const response = await fetch('https://my-portfolio-bot-production.up.railway.app/api/greeting', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          const data = await response.json();
+          const greetingMessage = { 
+            text: data.greeting || 'Hello! How can I help you today?', 
+            isUser: false,
+            timestamp: Date.now()
+          };
+          setMessages([greetingMessage]);
+        } catch (error) {
+          console.error('Greeting API Error:', error);
+          const fallbackMessage = { 
+            text: 'Hello! I\'m Amit\'s AI assistant. How can I help you today?', 
+            isUser: false,
+            timestamp: Date.now()
+          };
+          setMessages([fallbackMessage]);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchGreeting();
+    }
+  }, [isOpen]);
 
   // Save rate limit data to localStorage
   useEffect(() => {
@@ -178,6 +217,14 @@ export const ChatBot = () => {
     };
   }, [isResizing]);
 
+  const handleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  const handleMinimize = () => {
+    setIsOpen(false);
+  };
+
   return (
     <div className="fixed bottom-4 right-4 z-50">
       {/* Chat Toggle Button */}
@@ -192,16 +239,34 @@ export const ChatBot = () => {
       {isOpen && (
         <div 
           ref={chatWindowRef}
-          className="absolute bottom-20 right-0 bg-white rounded-lg shadow-xl flex flex-col"
+          className={`absolute bottom-20 right-0 bg-white rounded-lg shadow-xl flex flex-col ${
+            isExpanded ? 'bottom-4 right-4' : ''
+          }`}
           style={{ 
-            width: `${windowSize.width}px`, 
-            height: `${windowSize.height}px`,
+            width: isExpanded ? '50vw' : `${windowSize.width}px`, 
+            height: isExpanded ? '50vh' : `${windowSize.height}px`,
             cursor: isResizing ? 'nw-resize' : 'default'
           }}
         >
           {/* Header */}
-          <div className="p-4 bg-blue-500 text-white rounded-t-lg cursor-move">
+          <div className="p-4 bg-blue-500 text-white rounded-t-lg cursor-move flex justify-between items-center">
             <h3 className="font-medium">Chat with Amit</h3>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={handleExpand}
+                className="p-1 hover:bg-blue-600 rounded transition-colors"
+                title={isExpanded ? "Minimize" : "Expand"}
+              >
+                {isExpanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+              </button>
+              <button
+                onClick={handleMinimize}
+                className="p-1 hover:bg-blue-600 rounded transition-colors"
+                title="Close"
+              >
+                <X size={16} />
+              </button>
+            </div>
           </div>
 
           {/* Messages */}
@@ -253,12 +318,17 @@ export const ChatBot = () => {
             </div>
           </div>
 
-          {/* Resize Handle */}
-          <div
-            className="absolute bottom-0 left-0 w-4 h-4 cursor-nw-resize bg-gray-300 opacity-50 hover:opacity-75"
-            onMouseDown={handleMouseDown}
-            style={{ borderBottomLeftRadius: '8px' }}
-          />
+          {/* Resize Handle - Only show when not expanded */}
+          {!isExpanded && (
+            <div
+              className="absolute bottom-0 left-0 w-6 h-6 cursor-nw-resize bg-gray-400 hover:bg-gray-500 transition-colors"
+              onMouseDown={handleMouseDown}
+              style={{ 
+                borderBottomLeftRadius: '8px',
+                background: 'linear-gradient(135deg, transparent 50%, #9ca3af 50%)'
+              }}
+            />
+          )}
         </div>
       )}
     </div>
