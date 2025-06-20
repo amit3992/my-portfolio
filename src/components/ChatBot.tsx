@@ -159,6 +159,7 @@ export const ChatBot = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-API-Key': process.env.API_KEY || '', 
         },
         body: JSON.stringify({ message: inputMessage }),
       });
