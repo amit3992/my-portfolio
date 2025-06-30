@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Maximize2, Minimize2, X } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 
 interface Message {
   text: string;
@@ -42,8 +43,13 @@ export const ChatBot = () => {
       lastMessageTime: 0
     };
   });
+  const [hasBeenClosed, setHasBeenClosed] = useState(() => {
+    return localStorage.getItem('chatbot_closed') === 'true';
+  });
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatWindowRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const location = useLocation();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -52,6 +58,33 @@ export const ChatBot = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+  
+  // Create audio element for notification sound
+  useEffect(() => {
+    audioRef.current = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3');
+    return () => {
+      if (audioRef.current) {
+        audioRef.current = null;
+      }
+    };
+  }, []);
+  
+  // Auto-open chatbot on home page visit if it hasn't been closed before
+  useEffect(() => {
+    if (location.pathname === '/' && !hasBeenClosed) {
+      // Add a 3-second delay before showing the chatbot
+      const timer = setTimeout(() => {
+        setIsOpen(true);
+        // Play sound when chatbot opens
+        if (audioRef.current) {
+          audioRef.current.play().catch(err => console.error('Error playing sound:', err));
+        }
+      }, 3000); // 3000ms = 3 seconds
+      
+      // Clean up the timer if component unmounts before timeout completes
+      return () => clearTimeout(timer);
+    }
+  }, [location.pathname, hasBeenClosed]);
 
   // Call greeting API when chat first opens
   useEffect(() => {
@@ -224,6 +257,9 @@ export const ChatBot = () => {
 
   const handleMinimize = () => {
     setIsOpen(false);
+    // Remember that user has closed the chatbot
+    localStorage.setItem('chatbot_closed', 'true');
+    setHasBeenClosed(true);
   };
 
   return (
