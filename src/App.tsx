@@ -36,9 +36,9 @@ function App() {
             <Link to="/" className="text-xl font-semibold text-gray-900 hover:text-gray-700">
                 Amit Kulkarni
               </Link>
-              <p className="text-xl text-gray-600 mb-6">Staff Software Engineer</p>
+              <p className="text-xl text-gray-600 mb-6">Software Engineer</p>
               <p className="text-gray-600 mb-8">
-                Building backend systems that scale at Intuit for the past 9+ years. I lead technical initiatives that matter and love solving complex problems. My toolkit includes Java, Python, AWS, and designing distributed systems that don't fall over when things get busy.
+                Building backend systems that scale at Intuit for the past 7+ years. I lead technical initiatives that matter and love solving complex problems. My toolkit includes Java, Python, AWS, and designing distributed systems that don't fall over when things get busy.
               </p>
               <div className="flex space-x-4">
                 <a href="mailto:amit3992@gmail.com" className="flex items-center text-gray-600 hover:text-gray-900">

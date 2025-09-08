@@ -11,7 +11,7 @@ const About: React.FC = () => {
         </div>
         <h1 className="text-black">Hey, I'm Amit 👋</h1>
         <p className="intro">
-          I'm a Staff Software Engineer living in the Bay Area with my partner Alida, our dog Sunny, and two cats, Big Papa and Delilah who run the house.
+          I'm a Software Engineer living in the Bay Area with my partner Alida, our dog Sunny, and two cats, Big Papa and Delilah who run the house.
         </p>
       </section>
 
