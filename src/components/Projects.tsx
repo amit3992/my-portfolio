@@ -1,5 +1,5 @@
 import React from 'react';
-import { Github, ExternalLink } from 'lucide-react';
+import { Github } from 'lucide-react';
 import './Projects.css';
 
 const Projects: React.FC = () => {
@@ -8,7 +8,7 @@ const Projects: React.FC = () => {
       <header className="projects-header">
         <h1>Projects</h1>
         <p className="intro">
-          A collection of personal projects and experiments that I've built to learn new technologies and solve interesting problems.
+          Side projects and weekend experiments where I get to play with new tech and solve problems I find interesting. Here's what I've been tinkering with lately.
         </p>
       </header>
 
@@ -16,7 +16,7 @@ const Projects: React.FC = () => {
         <div className="project-card">
           <h3>FPL Captain Picker Agent</h3>
           <p className="project-description">
-          A Fantasy Premier League (FPL) tool that helps you choose the best captain for your team each gameweek. The tool uses both statistical analysis and AI-powered recommendations to suggest the optimal captain choice.
+          Every FPL player knows the weekly captain dilemma. I built this tool to combine stats with AI to help pick captains that actually deliver points. It's saved me from some terrible choices this season (and confirmed a few good ones).
           </p>
           <div className="project-tech">
             <span>Ollama</span>

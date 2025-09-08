@@ -38,8 +38,7 @@ function App() {
               </Link>
               <p className="text-xl text-gray-600 mb-6">Staff Software Engineer</p>
               <p className="text-gray-600 mb-8">
-                Seasoned software engineer with 9+ years at Intuit, specializing in building scalable backend systems
-                and leading high-impact technical initiatives. Expert in Java, Python, AWS, and distributed systems architecture.
+                Building backend systems that scale at Intuit for the past 9+ years. I lead technical initiatives that matter and love solving complex problems. My toolkit includes Java, Python, AWS, and designing distributed systems that don't fall over when things get busy.
               </p>
               <div className="flex space-x-4">
                 <a href="mailto:amit3992@gmail.com" className="flex items-center text-gray-600 hover:text-gray-900">

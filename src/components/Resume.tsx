@@ -8,7 +8,7 @@ const Resume: React.FC = () => {
       <header className="resume-header">
         <h1>Hey, I'm Amit</h1>
         <p className="intro">
-        Staff Software Engineer at Intuit with 9+ years of experience in building scalable backend systems and integrating AI into real-world products.
+        I've spent the last 9+ years at Intuit building backend systems that scale and recently, bringing AI into products people actually use. Here's what I've been up to.
         </p>
         <div className="mt-4">
                 <a href="https://docs.google.com/document/d/1T9G5AsyDaZsPm8cY-LUAbvykWliwLUfOkj0g0SppuTs/edit?tab=t.0" target='_blank' className="text-gray-500 hover:text-gray-900">
@@ -26,28 +26,28 @@ const Resume: React.FC = () => {
               <h3>Staff Software Engineer @ Intuit</h3>
               <p className="subtitle">Emerging Products Group · 2022-Present</p>
               <ul>
-              <li>Led backend development for Credit Karma’s Lightbox integration in QuickBooks, driving a 15% increase in financing sales</li>
-      <li>Designed seamless registration APIs with Credit Karma User Management, reducing signup friction and boosting new user registrations by 5%</li>
-      <li>Built a Financing AI Agent using RAG and LLMs to automate merchant outreach, resulting in a 20% uplift in estimate conversions</li>
-      <li>Driving the externalization of "Financing as a Service" to third-party Independent Service Vendors.</li>
+              <li>Led the backend team that brought Credit Karma's Lightbox into QuickBooks, which bumped financing sales by 15%</li>
+      <li>Created registration APIs that actually feel seamless to users, cutting signup friction and lifting new user numbers by 5%</li>
+      <li>Built an AI assistant that talks to merchants about financing options, boosting conversion rates by 20%</li>
+      <li>Currently working on opening up our "Financing as a Service" platform to third-party vendors</li>
               </ul>
             </div>
             <div className="role">
               <h3>Senior Software Engineer @ Intuit</h3>
               <p className="subtitle">QuickBooks App Store · 2019-2022</p>
               <ul>
-              <li>Architected and launched the unified global App Marketplace, enabling localized app content and boosting 3P developer reach</li>
-      <li>Developed an app recommendation engine based on AQI, increasing app connections and retention by 15%</li>
-      <li>Led a team to build an event-driven system for real-time app updates, reducing sync time from 2 hours to minutes</li>
-      <li>Championed operational excellence initiatives to maintain 99.9% uptime during peak tax season</li>
+              <li>Built and launched a global App Marketplace that lets developers reach users in their own language</li>
+      <li>Created a recommendation engine that actually suggests apps people want, boosting connections and retention by 15%</li>
+      <li>Led the team that rebuilt our update system to be event-driven, cutting sync delays from hours to minutes</li>
+      <li>Kept our systems running smoothly through tax season madness with 99.9% uptime</li>
               </ul>
             </div>
             <div className="role">
               <h3>Software Engineer @ Ericsson</h3>
               <p className="subtitle">Chargind Node Automation · 2016-2018</p>
               <ul>
-              <li>Designed and delivered a Spring Boot automation tool that converted Excel-based telecom orders to XML, reducing order processing time from 1 week to 5 hours</li>
-    <li>Led end-to-end automation of catalog configuration and deployment, improving delivery speed by 40% and accelerating time-to-market for major customer projects</li>
+              <li>Built a Spring Boot tool that turned mind-numbing Excel order processing into an automated system, cutting work from a week to just 5 hours</li>
+    <li>Automated our entire catalog configuration process, speeding up delivery by 40% and helping us ship customer projects way faster</li>
               </ul>
             </div>
           </section>
@@ -58,10 +58,10 @@ const Resume: React.FC = () => {
             <div className="impact-card">
       <h3>Financing as a Service</h3>
       <ul>
-      <li>Founding engineer (#5) on the team — helped take a whiteboard concept to production in under 3 months</li>
-        <li>20% increase in merchant sales conversion via AI-driven Financing Agent</li>
-        <li>5% lift in Credit Karma registrations through streamlined seamless user registration</li>
-        <li>Reduced latency by 40% and achieved 99.99% uptime during peak usage</li>
+      <li>Joined as engineer #5 on the team — we took an idea on a whiteboard to production in just 3 months</li>
+        <li>Built an AI assistant that helped boost merchant sales by 20%</li>
+        <li>Made the registration flow so smooth that Credit Karma signups jumped 5%</li>
+        <li>Cut response times by 40% while keeping the system rock-solid (99.99% uptime) even during traffic spikes</li>
       </ul>
     </div>
 
@@ -69,18 +69,18 @@ const Resume: React.FC = () => {
     <div className="impact-card">
       <h3>Global Quickbooks App Marketplace</h3>
       <ul>
-        <li>10% growth in app integrations after leading the launch of unified app marketplace</li>
-        <li>Reduced app content sync delays from 2 hours to minutes using event-driven architecture</li>
-        <li>Localized app content in 11+ languages, deployed across multiple regions</li>
+        <li>Helped grow app integrations by 10% after launching our unified marketplace</li>
+        <li>Rebuilt our sync system to be event-driven, cutting delays from hours to real-time</li>
+        <li>Made the marketplace work in 11+ languages across different regions</li>
       </ul>
     </div>
     <div className="impact-card">
       <h3>Engineering Interview Revamp</h3>
       <ul>
-        <li>Redesigned Intuit’s engineering interview process to focus on real-world engineering skills</li>
-        <li>Developed LLM-powered craft projects adopted across multiple engineering domains</li>
-        <li>Launched public GitHub org for interview exercises, improving candidate transparency and prep</li>
-        <li>Improved candidate NPS and assessor signal accuracy</li>
+        <li>Revamped how we interview engineers to focus on practical skills instead of whiteboard puzzles</li>
+        <li>Created interview projects using LLMs that actually test what engineers do day-to-day</li>
+        <li>Put our interview exercises on GitHub so candidates know what to expect</li>
+        <li>Made the whole process better for both candidates and interviewers</li>
       </ul>
     </div>
             </div>
@@ -92,20 +92,20 @@ const Resume: React.FC = () => {
             <h2>Technical Skills</h2>
             <div className="skills-container">
               <div className="skill-row">
-                <h3>Languages:</h3>
+                <span>Languages I use daily:</span>
                 <span>Java, Python, Kotlin, TypeScript, SQL</span>
               </div>
               <div className="skill-row">
-                <h3>AI & LLMs:</h3>
-                <span>RAG pipelines, LLM integration (OpenAI, Ollama), LangChain, prompt engineering</span>
+                <span>AI stuff I work with:</span>
+                <span>Building RAG systems, integrating LLMs (OpenAI, Ollama), LangChain, crafting prompts that actually work</span>
               </div>
               <div className="skill-row">
-                <h3>Frameworks & Platforms</h3>
+                <span>Tech stack:</span>
                 <span>Spring Boot, AWS, Kubernetes, React, Kafka</span>
               </div>
               <div className="skill-row">
-                <h3>Product Development:</h3>
-                <span>Rapid prototyping, MVP development, user-first architecture, experimentation toward product-market fit</span>
+                <span>How I build products:</span>
+                <span>Quick prototypes, lean MVPs, putting users first, and testing assumptions until we find what works</span>
               </div>
             </div>
           </section>

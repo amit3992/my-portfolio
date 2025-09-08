@@ -109,7 +109,7 @@ export const ChatBot = () => {
         } catch (error) {
           console.error('Greeting API Error:', error);
           const fallbackMessage = { 
-            text: 'Hello! I\'m Amit\'s AI assistant. How can I help you today?', 
+            text: 'Hi there! I\'m Amit\'s digital assistant. Got questions about his work or background? I\'m here to help.', 
             isUser: false,
             timestamp: Date.now()
           };
@@ -149,13 +149,13 @@ export const ChatBot = () => {
     
     // Check cooldown
     if (now - rateLimit.lastMessageTime < COOLDOWN) {
-      return `Please wait ${((COOLDOWN - (now - rateLimit.lastMessageTime)) / 1000).toFixed(1)} seconds before sending another message.`;
+      return `Just a moment - you can send another message in ${((COOLDOWN - (now - rateLimit.lastMessageTime)) / 1000).toFixed(1)} seconds.`;
     }
 
     // Check rate limit
     if (rateLimit.count >= RATE_LIMIT && now < rateLimit.resetTime) {
       const minutesLeft = Math.ceil((rateLimit.resetTime - now) / (60 * 1000));
-      return `Message limit reached. Please wait ${minutesLeft} minute${minutesLeft > 1 ? 's' : ''} before sending more messages.`;
+      return `Looks like we've been chatting a lot! Mind waiting about ${minutesLeft} minute${minutesLeft > 1 ? 's' : ''} before we continue?`;
     }
 
     return null;
@@ -206,7 +206,7 @@ export const ChatBot = () => {
       setMessages(prev => [...prev, botMessage]);
     } catch (error) {
       console.error('ChatBot API Error:', error);
-      const errorMessage = { text: 'Sorry, I encountered an error.', isUser: false };
+      const errorMessage = { text: 'Hmm, something went wrong on my end. Let\'s try again?', isUser: false };
       setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
@@ -287,7 +287,7 @@ export const ChatBot = () => {
         >
           {/* Header */}
           <div className="p-4 bg-blue-500 text-white rounded-t-lg cursor-move flex justify-between items-center">
-            <h3 className="font-medium">Chat with Amit</h3>
+            <h3 className="font-medium">Ask me about Amit</h3>
             <div className="flex items-center space-x-2">
               <button
                 onClick={handleExpand}
@@ -342,7 +342,7 @@ export const ChatBot = () => {
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Type a message..."
+                placeholder="What would you like to know?"
                 className="flex-1 p-2 border rounded-lg focus:outline-none focus:border-blue-500"
               />
               <button
