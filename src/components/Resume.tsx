@@ -8,7 +8,7 @@ const Resume: React.FC = () => {
       <header className="resume-header">
         <h1>Hey, I'm Amit</h1>
         <p className="intro">
-        I've spent the last 9+ years at Intuit building backend systems that scale and recently, bringing AI into products people actually use. Here's what I've been up to.
+        I've spent the last 9+ years at Intuit & Ericsson building backend systems that scale and recently, bringing AI into products people actually use. Here's what I've been up to.
         </p>
         <div className="mt-4">
                 <a href="https://docs.google.com/document/d/1T9G5AsyDaZsPm8cY-LUAbvykWliwLUfOkj0g0SppuTs/edit?tab=t.0" target='_blank' className="text-gray-500 hover:text-gray-900">
@@ -44,7 +44,7 @@ const Resume: React.FC = () => {
             </div>
             <div className="role">
               <h3>Software Engineer @ Ericsson</h3>
-              <p className="subtitle">Chargind Node Automation · 2016-2018</p>
+              <p className="subtitle">Charging Node Automation · 2016-2018</p>
               <ul>
               <li>Built a Spring Boot tool that turned mind-numbing Excel order processing into an automated system, cutting work from a week to just 5 hours</li>
     <li>Automated our entire catalog configuration process, speeding up delivery by 40% and helping us ship customer projects way faster</li>
