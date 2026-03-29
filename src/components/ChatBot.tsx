@@ -187,27 +187,66 @@ export const ChatBot = () => {
     setInputMessage('');
     setIsLoading(true);
 
+    // Add an empty bot message that we'll stream into
+    const botMessage: Message = { text: '', isUser: false, timestamp: Date.now() };
+    setMessages(prev => [...prev, botMessage]);
+
     try {
-      const response = await fetch('https://my-portfolio-bot-production.up.railway.app/api/chat', {
+      const response = await fetch('https://my-portfolio-bot-production.up.railway.app/api/chat/stream', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-API-Key': '8e77b3e8f9c24dd5a6d9e1f8a2b3c4d5e6f7a8b9', 
+          'X-API-Key': '8e77b3e8f9c24dd5a6d9e1f8a2b3c4d5e6f7a8b9',
         },
         body: JSON.stringify({ message: inputMessage }),
       });
 
-      const data = await response.json();
-      const botMessage = { 
-        text: data.reply || 'Sorry, I encountered an error.', 
-        isUser: false,
-        timestamp: Date.now()
-      };
-      setMessages(prev => [...prev, botMessage]);
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error('No reader available');
+
+      const decoder = new TextDecoder();
+      let accumulated = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const text = decoder.decode(value, { stream: true });
+        const lines = text.split('\n');
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = line.slice(6);
+            if (data === '[DONE]') break;
+            try {
+              const parsed = JSON.parse(data);
+              accumulated += parsed.token;
+              setMessages(prev => {
+                const updated = [...prev];
+                updated[updated.length - 1] = { ...updated[updated.length - 1], text: accumulated };
+                return updated;
+              });
+            } catch {
+              // skip malformed chunks
+            }
+          }
+        }
+      }
+
+      if (!accumulated) {
+        setMessages(prev => {
+          const updated = [...prev];
+          updated[updated.length - 1] = { ...updated[updated.length - 1], text: 'Sorry, I encountered an error.' };
+          return updated;
+        });
+      }
     } catch (error) {
       console.error('ChatBot API Error:', error);
-      const errorMessage = { text: 'Hmm, something went wrong on my end. Let\'s try again?', isUser: false };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages(prev => {
+        const updated = [...prev];
+        updated[updated.length - 1] = { ...updated[updated.length - 1], text: 'Hmm, something went wrong on my end. Let\'s try again?' };
+        return updated;
+      });
     } finally {
       setIsLoading(false);
     }
