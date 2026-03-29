@@ -92,6 +92,12 @@ function App() {
           </div>
 
           <div className="project-entry">
+            <h3><a href="https://github.com/amit3992/my-portfolio-bot">Portfolio AI Chatbot</a></h3>
+            <p>RAG-powered chatbot on this site. Streams responses via SSE, uses Gemini with Claude fallback, and includes a private analytics dashboard tracking questions, visitors, and errors via Supabase.</p>
+            <p className="tech">Python · FastAPI · LangChain · Gemini · Claude · FAISS · Supabase · Railway</p>
+          </div>
+
+          <div className="project-entry">
             <h3><a href="https://github.com/intuit-A4A">Intuit A4A Interview Platform</a></h3>
             <p>New interview format for Intuit engineering. Craft applications that test practical skills and AI proficiency, used by assessors across all domains.</p>
             <p className="tech">Python · LLMs · Public GitHub org</p>
