@@ -225,6 +225,15 @@ export const ChatBot = () => {
     setInputMessage('');
     setIsLoading(true);
 
+    // Build conversation history from existing messages (skip greeting, limit to last 10 turns)
+    const history = messages
+      .filter(m => m.text && m.text.trim())
+      .slice(-10)
+      .map(m => ({
+        role: m.isUser ? 'user' : 'assistant',
+        content: m.text,
+      }));
+
     const botMessage: Message = { text: '', isUser: false, timestamp: Date.now() };
     setMessages(prev => [...prev, botMessage]);
 
@@ -236,7 +245,7 @@ export const ChatBot = () => {
           'X-API-Key': '8e77b3e8f9c24dd5a6d9e1f8a2b3c4d5e6f7a8b9',
           'X-Session-ID': getSessionId(),
         },
-        body: JSON.stringify({ message: inputMessage }),
+        body: JSON.stringify({ message: inputMessage, history }),
       });
 
       const reader = response.body?.getReader();
