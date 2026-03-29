@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Maximize2, Minimize2, X } from 'lucide-react';
+import { X, Send, MessageCircle } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 
 interface Message {
@@ -14,11 +14,6 @@ interface RateLimit {
   lastMessageTime: number;
 }
 
-interface WindowSize {
-  width: number;
-  height: number;
-}
-
 const getSessionId = (): string => {
   let id = localStorage.getItem('chatbot_session_id');
   if (!id) {
@@ -28,22 +23,68 @@ const getSessionId = (): string => {
   return id;
 };
 
-const RATE_LIMIT = 10; // messages per window
-const TIME_WINDOW = 5 * 60 * 1000; // 5 minutes in milliseconds
-const COOLDOWN = 1000; // 1 second between messages
-const MIN_WIDTH = 300;
-const MIN_HEIGHT = 400;
-const MAX_WIDTH = 600;
-const MAX_HEIGHT = 800;
+const RATE_LIMIT = 10;
+const TIME_WINDOW = 5 * 60 * 1000;
+const COOLDOWN = 1000;
+
+// Parse message text into renderable segments
+type Segment = { type: 'text' | 'bold'; content: string };
+
+const parseSegments = (text: string): Segment[] => {
+  const segments: Segment[] = [];
+  const regex = /\*\*(.*?)\*\*/g;
+  let lastIndex = 0;
+  let match;
+
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      segments.push({ type: 'text', content: text.slice(lastIndex, match.index) });
+    }
+    segments.push({ type: 'bold', content: match[1] });
+    lastIndex = regex.lastIndex;
+  }
+
+  if (lastIndex < text.length) {
+    segments.push({ type: 'text', content: text.slice(lastIndex) });
+  }
+
+  return segments;
+};
+
+const MessageContent = ({ text }: { text: string }) => {
+  const lines = text.split('\n');
+
+  return (
+    <>
+      {lines.map((line, i) => {
+        const trimmed = line.trim();
+        const isBullet = /^[•\-*]\s+/.test(trimmed);
+        const content = isBullet ? trimmed.replace(/^[•\-*]\s+/, '') : line;
+        const segments = parseSegments(content);
+
+        return (
+          <span key={i}>
+            {isBullet && <span className="mr-1">{'\u2022'}</span>}
+            {segments.map((seg, j) =>
+              seg.type === 'bold' ? (
+                <strong key={j}>{seg.content}</strong>
+              ) : (
+                <span key={j}>{seg.content}</span>
+              )
+            )}
+            {i < lines.length - 1 && <br />}
+          </span>
+        );
+      })}
+    </>
+  );
+};
 
 export const ChatBot = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [windowSize, setWindowSize] = useState<WindowSize>({ width: 320, height: 384 });
-  const [isResizing, setIsResizing] = useState(false);
   const [rateLimit, setRateLimit] = useState<RateLimit>(() => {
     const stored = localStorage.getItem('chatbot_ratelimit');
     return stored ? JSON.parse(stored) : {
@@ -56,7 +97,7 @@ export const ChatBot = () => {
     return localStorage.getItem('chatbot_closed') === 'true';
   });
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const chatWindowRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const location = useLocation();
 
@@ -67,8 +108,13 @@ export const ChatBot = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-  
-  // Create audio element for notification sound
+
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => inputRef.current?.focus(), 100);
+    }
+  }, [isOpen]);
+
   useEffect(() => {
     audioRef.current = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3');
     return () => {
@@ -77,25 +123,20 @@ export const ChatBot = () => {
       }
     };
   }, []);
-  
-  // Auto-open chatbot on home page visit if it hasn't been closed before
+
   useEffect(() => {
     if (location.pathname === '/' && !hasBeenClosed) {
-      // Add a 3-second delay before showing the chatbot
       const timer = setTimeout(() => {
         setIsOpen(true);
-        // Play sound when chatbot opens
         if (audioRef.current) {
           audioRef.current.play().catch(err => console.error('Error playing sound:', err));
         }
-      }, 3000); // 3000ms = 3 seconds
-      
-      // Clean up the timer if component unmounts before timeout completes
+      }, 3000);
+
       return () => clearTimeout(timer);
     }
   }, [location.pathname, hasBeenClosed]);
 
-  // Call greeting API when chat first opens
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       const fetchGreeting = async () => {
@@ -110,20 +151,17 @@ export const ChatBot = () => {
           });
 
           const data = await response.json();
-          const greetingMessage = { 
-            text: data.greeting || 'Hello! How can I help you today?', 
+          setMessages([{
+            text: data.greeting || 'Hey! Ask me anything about Amit.',
             isUser: false,
             timestamp: Date.now()
-          };
-          setMessages([greetingMessage]);
-        } catch (error) {
-          console.error('Greeting API Error:', error);
-          const fallbackMessage = { 
-            text: 'Hi there! I\'m Amit\'s digital assistant. Got questions about his work or background? I\'m here to help.', 
+          }]);
+        } catch {
+          setMessages([{
+            text: "Hey! I'm Amit's assistant. Ask me anything about his work or experience.",
             isUser: false,
             timestamp: Date.now()
-          };
-          setMessages([fallbackMessage]);
+          }]);
         } finally {
           setIsLoading(false);
         }
@@ -133,12 +171,10 @@ export const ChatBot = () => {
     }
   }, [isOpen]);
 
-  // Save rate limit data to localStorage
   useEffect(() => {
     localStorage.setItem('chatbot_ratelimit', JSON.stringify(rateLimit));
   }, [rateLimit]);
 
-  // Reset rate limit counter when time window expires
   useEffect(() => {
     const checkRateLimit = () => {
       if (Date.now() > rateLimit.resetTime) {
@@ -156,16 +192,14 @@ export const ChatBot = () => {
 
   const checkRateLimit = (): string | null => {
     const now = Date.now();
-    
-    // Check cooldown
+
     if (now - rateLimit.lastMessageTime < COOLDOWN) {
-      return `Just a moment - you can send another message in ${((COOLDOWN - (now - rateLimit.lastMessageTime)) / 1000).toFixed(1)} seconds.`;
+      return 'Hold on, one moment...';
     }
 
-    // Check rate limit
     if (rateLimit.count >= RATE_LIMIT && now < rateLimit.resetTime) {
       const minutesLeft = Math.ceil((rateLimit.resetTime - now) / (60 * 1000));
-      return `Looks like we've been chatting a lot! Mind waiting about ${minutesLeft} minute${minutesLeft > 1 ? 's' : ''} before we continue?`;
+      return `Let's take a breather! Try again in ${minutesLeft}m.`;
     }
 
     return null;
@@ -176,28 +210,21 @@ export const ChatBot = () => {
 
     const rateLimitError = checkRateLimit();
     if (rateLimitError) {
-      const errorMessage = { text: rateLimitError, isUser: false };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages(prev => [...prev, { text: rateLimitError, isUser: false }]);
       return;
     }
 
-    // Update rate limit
     setRateLimit(prev => ({
       ...prev,
       count: prev.count + 1,
       lastMessageTime: Date.now()
     }));
 
-    const userMessage = { 
-      text: inputMessage, 
-      isUser: true,
-      timestamp: Date.now() 
-    };
+    const userMessage = { text: inputMessage, isUser: true, timestamp: Date.now() };
     setMessages(prev => [...prev, userMessage]);
     setInputMessage('');
     setIsLoading(true);
 
-    // Add an empty bot message that we'll stream into
     const botMessage: Message = { text: '', isUser: false, timestamp: Date.now() };
     setMessages(prev => [...prev, botMessage]);
 
@@ -247,7 +274,7 @@ export const ChatBot = () => {
       if (!accumulated) {
         setMessages(prev => {
           const updated = [...prev];
-          updated[updated.length - 1] = { ...updated[updated.length - 1], text: 'Sorry, I encountered an error.' };
+          updated[updated.length - 1] = { ...updated[updated.length - 1], text: 'Sorry, something went wrong.' };
           return updated;
         });
       }
@@ -255,7 +282,7 @@ export const ChatBot = () => {
       console.error('ChatBot API Error:', error);
       setMessages(prev => {
         const updated = [...prev];
-        updated[updated.length - 1] = { ...updated[updated.length - 1], text: 'Hmm, something went wrong on my end. Let\'s try again?' };
+        updated[updated.length - 1] = { ...updated[updated.length - 1], text: 'Something went wrong. Try again?' };
         return updated;
       });
     } finally {
@@ -270,154 +297,106 @@ export const ChatBot = () => {
     }
   };
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsResizing(true);
-  };
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!isResizing || !chatWindowRef.current) return;
-
-      const rect = chatWindowRef.current.getBoundingClientRect();
-      const newWidth = Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, e.clientX - rect.left));
-      const newHeight = Math.max(MIN_HEIGHT, Math.min(MAX_HEIGHT, e.clientY - rect.top));
-
-      setWindowSize({ width: newWidth, height: newHeight });
-    };
-
-    const handleMouseUp = () => {
-      setIsResizing(false);
-    };
-
-    if (isResizing) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-    }
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [isResizing]);
-
-  const handleExpand = () => {
-    setIsExpanded(!isExpanded);
-  };
-
-  const handleMinimize = () => {
+  const handleClose = () => {
     setIsOpen(false);
-    // Remember that user has closed the chatbot
     localStorage.setItem('chatbot_closed', 'true');
     setHasBeenClosed(true);
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
-      {/* Chat Toggle Button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center text-white shadow-lg hover:bg-blue-600 transition-colors"
-      >
-        💬
-      </button>
+    <div className="fixed bottom-5 right-5 z-50">
+      {/* Toggle Button */}
+      {!isOpen && (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="group w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 hover:scale-105 transition-all duration-200"
+        >
+          <MessageCircle size={24} className="group-hover:scale-110 transition-transform" />
+        </button>
+      )}
 
       {/* Chat Window */}
       {isOpen && (
-        <div 
-          ref={chatWindowRef}
-          className={`absolute bottom-20 right-0 bg-white rounded-lg shadow-xl flex flex-col ${
-            isExpanded ? 'bottom-4 right-4' : ''
-          }`}
-          style={{ 
-            width: isExpanded ? '50vw' : `${windowSize.width}px`, 
-            height: isExpanded ? '50vh' : `${windowSize.height}px`,
-            cursor: isResizing ? 'nw-resize' : 'default'
-          }}
+        <div
+          className="absolute bottom-0 right-0 w-[380px] h-[500px] bg-white rounded-2xl shadow-2xl shadow-black/10 flex flex-col overflow-hidden border border-gray-100"
+          style={{ animation: 'chatSlideUp 0.25s ease-out' }}
         >
           {/* Header */}
-          <div className="p-4 bg-blue-500 text-white rounded-t-lg cursor-move flex justify-between items-center">
-            <h3 className="font-medium">Ask me about Amit</h3>
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={handleExpand}
-                className="p-1 hover:bg-blue-600 rounded transition-colors"
-                title={isExpanded ? "Minimize" : "Expand"}
-              >
-                {isExpanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
-              </button>
-              <button
-                onClick={handleMinimize}
-                className="p-1 hover:bg-blue-600 rounded transition-colors"
-                title="Close"
-              >
-                <X size={16} />
-              </button>
+          <div className="px-5 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white flex justify-between items-center">
+            <div>
+              <h3 className="font-semibold text-[15px]">Chat with Amit's AI</h3>
+              <p className="text-blue-100 text-xs mt-0.5">Ask about experience, skills, projects</p>
             </div>
+            <button
+              onClick={handleClose}
+              className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+            >
+              <X size={18} />
+            </button>
           </div>
 
           {/* Messages */}
-          <div className="flex-1 p-4 overflow-y-auto">
+          <div className="flex-1 px-4 py-3 overflow-y-auto space-y-3 bg-gray-50/50">
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`mb-4 flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
+                className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-[80%] p-3 rounded-lg ${
+                  className={`max-w-[85%] px-3.5 py-2.5 text-[14px] leading-relaxed ${
                     message.isUser
-                      ? 'bg-blue-500 text-white rounded-br-none'
-                      : 'bg-gray-100 text-gray-800 rounded-bl-none'
+                      ? 'bg-blue-500 text-white rounded-2xl rounded-br-md'
+                      : 'bg-white text-gray-700 rounded-2xl rounded-bl-md shadow-sm border border-gray-100'
                   }`}
                 >
-                  {message.text}
+                  <MessageContent text={message.text} />
                 </div>
               </div>
             ))}
-            {isLoading && (
+            {isLoading && messages[messages.length - 1]?.text === '' && (
               <div className="flex justify-start">
-                <div className="bg-gray-100 text-gray-800 p-3 rounded-lg rounded-bl-none">
-                  Typing...
+                <div className="bg-white text-gray-400 px-4 py-3 rounded-2xl rounded-bl-md shadow-sm border border-gray-100">
+                  <div className="flex space-x-1.5">
+                    <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                  </div>
                 </div>
               </div>
             )}
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input Area */}
-          <div className="p-4 border-t">
-            <div className="flex gap-2">
+          {/* Input */}
+          <div className="px-4 py-3 border-t border-gray-100 bg-white">
+            <div className="flex items-center gap-2">
               <input
+                ref={inputRef}
                 type="text"
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="What would you like to know?"
-                className="flex-1 p-2 border rounded-lg focus:outline-none focus:border-blue-500"
+                onKeyDown={handleKeyPress}
+                placeholder="Ask something..."
+                className="flex-1 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-400 focus:bg-white transition-colors placeholder:text-gray-400"
               />
               <button
                 onClick={handleSendMessage}
                 disabled={!inputMessage.trim() || isLoading}
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50"
+                className="p-2.5 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-colors disabled:opacity-40 disabled:hover:bg-blue-500"
               >
-                Send
+                <Send size={16} />
               </button>
             </div>
           </div>
-
-          {/* Resize Handle - Only show when not expanded */}
-          {!isExpanded && (
-            <div
-              className="absolute bottom-0 left-0 w-6 h-6 cursor-nw-resize bg-gray-400 hover:bg-gray-500 transition-colors"
-              onMouseDown={handleMouseDown}
-              style={{ 
-                borderBottomLeftRadius: '8px',
-                background: 'linear-gradient(135deg, transparent 50%, #9ca3af 50%)'
-              }}
-            />
-          )}
         </div>
       )}
+
+      <style>{`
+        @keyframes chatSlideUp {
+          from { opacity: 0; transform: translateY(12px) scale(0.97); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+      `}</style>
     </div>
   );
 };
