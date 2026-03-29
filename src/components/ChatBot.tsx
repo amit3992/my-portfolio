@@ -19,6 +19,15 @@ interface WindowSize {
   height: number;
 }
 
+const getSessionId = (): string => {
+  let id = localStorage.getItem('chatbot_session_id');
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem('chatbot_session_id', id);
+  }
+  return id;
+};
+
 const RATE_LIMIT = 10; // messages per window
 const TIME_WINDOW = 5 * 60 * 1000; // 5 minutes in milliseconds
 const COOLDOWN = 1000; // 1 second between messages
@@ -96,6 +105,7 @@ export const ChatBot = () => {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
+              'X-Session-ID': getSessionId(),
             },
           });
 
@@ -197,6 +207,7 @@ export const ChatBot = () => {
         headers: {
           'Content-Type': 'application/json',
           'X-API-Key': '8e77b3e8f9c24dd5a6d9e1f8a2b3c4d5e6f7a8b9',
+          'X-Session-ID': getSessionId(),
         },
         body: JSON.stringify({ message: inputMessage }),
       });
