@@ -333,8 +333,8 @@ export const ChatBot = () => {
           {/* Header */}
           <div className="px-5 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white flex justify-between items-center">
             <div>
-              <h3 className="font-semibold text-[15px]">Chat with Amit's AI</h3>
-              <p className="text-blue-100 text-xs mt-0.5">Ask about experience, skills, projects</p>
+              <h3 className="font-semibold text-[15px]">Veda</h3>
+              <p className="text-blue-100 text-xs mt-0.5">Amit's AI assistant</p>
             </div>
             <button
               onClick={handleClose}
