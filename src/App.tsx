@@ -130,7 +130,7 @@ function App() {
         <section id="education" className="section">
           <h2>Education</h2>
           <div className="role-entry">
-            <h3>M.S. Electronics & Computer Engineering</h3>
+            <h3>M.S. Computer Engineering</h3>
             <p className="meta">Georgia Institute of Technology, 2014 to 2015</p>
           </div>
           <div className="role-entry">
