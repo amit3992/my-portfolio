@@ -52,7 +52,6 @@ function App() {
               <li>First FDE hire. Contributed to early hiring decisions and team processes as the org scaled.</li>
               <li>Ran technical strategy for enterprise accounts, closing deals near $1M ARR through hands-on Fin deployments.</li>
               <li>Part of the team that built Fin Monitors from 0 to GA in 3 months.</li>
-              <li>Core maintainer of the Fin CLI, a CLI tool used across the FD org to configure Intercom workspaces.</li>
               <li>Helped drive Claude Code adoption across FD and SE teams by writing a set of Intercom-specific skills and plugins.</li>
             </ul>
           </div>
