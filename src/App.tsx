@@ -85,15 +85,10 @@ function App() {
           <h2>Projects</h2>
 
           <div className="project-entry">
-            <h3><a href="https://github.com/amit3992/fpl-copilot">FPL Copilot</a></h3>
-            <p>A conversational CLI copilot for Fantasy Premier League. Chat with Claude to analyze your team, scout players, review fixtures, and execute transfers directly from the terminal. Like Claude Code, but for FPL.</p>
-            <p className="tech">Python · Anthropic API · Playwright · aiohttp · Rich</p>
-          </div>
-
-          <div className="project-entry">
-            <h3><a href="https://github.com/amit3992/fpl_captain_agent">FPL Captain Picker Agent</a></h3>
-            <p>Uses stats and LLMs to help pick Fantasy Premier League captains. Deployed on Railway.</p>
-            <p className="tech">Python · Ollama · OpenAI API</p>
+            <h3><a href="https://github.com/amit3992/fpl-cli">FPL CLI</a></h3>
+            <p>Command-line tool for Fantasy Premier League designed for both human and AI agent use. Check your squad, scout players, review fixtures, manage transfers, and monitor injury news straight from the terminal. Supports JSON output for machine-readable results.</p>
+            <p>Also built <a href="https://github.com/amit3992/fpl-copilot">FPL Copilot</a> — a conversational CLI copilot powered by Claude that uses fpl-cli under the hood.</p>
+            <p className="tech">TypeScript · Node.js · npm · Python · Anthropic API</p>
           </div>
 
           <div className="project-entry">
