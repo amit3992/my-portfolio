@@ -1,9 +1,8 @@
-import { BrowserRouter as Router } from 'react-router-dom';
 import { ChatBot } from './components/ChatBot';
 
 function App() {
   return (
-    <Router>
+    <>
       <div className="page">
         {/* Header */}
         <header className="site-header">
@@ -152,7 +151,7 @@ function App() {
         </footer>
       </div>
       <ChatBot />
-    </Router>
+    </>
   );
 }
 

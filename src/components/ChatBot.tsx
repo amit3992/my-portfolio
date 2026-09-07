@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
 import { X, Send, MessageCircle } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
 
 interface Message {
   text: string;
@@ -99,7 +98,6 @@ export const ChatBot = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const location = useLocation();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -125,7 +123,7 @@ export const ChatBot = () => {
   }, []);
 
   useEffect(() => {
-    if (location.pathname === '/' && !hasBeenClosed) {
+    if (!hasBeenClosed) {
       const timer = setTimeout(() => {
         setIsOpen(true);
         if (audioRef.current) {
@@ -135,7 +133,7 @@ export const ChatBot = () => {
 
       return () => clearTimeout(timer);
     }
-  }, [location.pathname, hasBeenClosed]);
+  }, [hasBeenClosed]);
 
   useEffect(() => {
     if (isOpen && messages.length === 0) {
