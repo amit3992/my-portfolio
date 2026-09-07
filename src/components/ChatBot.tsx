@@ -290,9 +290,9 @@ export const ChatBot = () => {
         style={{
           fontFamily: 'var(--sans)',
           fontWeight: 500,
-          color: '#FFFFFF',
-          background: 'var(--link-soft)',
-          border: '1px solid var(--link-soft)',
+          color: 'var(--ink)',
+          background: 'transparent',
+          border: '1px solid var(--hairline)',
           borderRadius: '6px',
         }}
       >
@@ -318,21 +318,22 @@ export const ChatBot = () => {
       <div
         className="px-4 py-3 flex justify-between items-center"
         style={{
-          background: 'var(--link-soft)',
+          borderBottom: '1px solid var(--hairline)',
         }}
       >
         <div>
-          <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#FFFFFF' }}>
+          <h3 style={{ fontSize: '14px', fontWeight: 600, color: 'var(--ink)' }}>
             Ask about Amit&apos;s work
           </h3>
-          <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.75)', marginTop: '2px' }}>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '2px' }}>
             Veda, Amit&apos;s AI assistant
           </p>
         </div>
         <button
           onClick={handleClose}
+          aria-label="Close chat"
           className="p-1"
-          style={{ color: '#FFFFFF', borderRadius: '4px' }}
+          style={{ color: 'var(--ink)', borderRadius: '4px' }}
         >
           <X size={18} />
         </button>
@@ -412,6 +413,7 @@ export const ChatBot = () => {
         <button
           onClick={handleSendMessage}
           disabled={!inputMessage.trim() || isLoading}
+          aria-label="Send message"
           className="p-2"
           style={{
             background: 'var(--ink)',

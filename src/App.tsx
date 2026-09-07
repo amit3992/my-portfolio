@@ -60,11 +60,12 @@ function App() {
         {/* Work */}
         <section id="work" className="section">
           <h2>Work</h2>
-          <p style={{ color: 'var(--muted)' }}>
+          <p className="work-summary">
             First Forward Deployed Engineer hire at Intercom, onboarding enterprise
             customers onto Fin and shipping Intercom-specific Claude Code plugins.
             Before that, seven years at Intuit building financing platforms, a RAG
-            agent, and event-driven delivery pipelines kept at 99.9% through tax season.
+            agent, and event-driven delivery pipelines — services held at 99.9%
+            availability through tax season.
             Full history on{' '}
             <a href="https://www.linkedin.com/in/amit3992/">LinkedIn</a>.
           </p>
@@ -74,7 +75,7 @@ function App() {
         <section id="now" className="section">
           <h2>Now</h2>
           <ul className="now-list">
-            <li>Onboarding enterprise customers onto Fin at Intercom</li>
+            <li>Manchester United fan since I was a kid</li>
             <li>Learning French at Alliance Fran&ccedil;aise Silicon Valley</li>
             <li>Reading <em>How to Win the Premier League</em> by Ian Graham</li>
           </ul>
