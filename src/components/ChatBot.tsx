@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { X, Send, MessageCircle } from 'lucide-react';
+import { X, Send } from 'lucide-react';
 
 interface Message {
   text: string;
@@ -63,7 +63,7 @@ const MessageContent = ({ text }: { text: string }) => {
 
         return (
           <span key={i}>
-            {isBullet && <span className="mr-1">{'\u2022'}</span>}
+            {isBullet && <span>{'\u2022'} </span>}
             {segments.map((seg, j) =>
               seg.type === 'bold' ? (
                 <strong key={j}>{seg.content}</strong>
@@ -92,15 +92,11 @@ export const ChatBot = () => {
       lastMessageTime: 0
     };
   });
-  const [hasBeenClosed, setHasBeenClosed] = useState(() => {
-    return localStorage.getItem('chatbot_closed') === 'true';
-  });
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView();
   };
 
   useEffect(() => {
@@ -112,28 +108,6 @@ export const ChatBot = () => {
       setTimeout(() => inputRef.current?.focus(), 100);
     }
   }, [isOpen]);
-
-  useEffect(() => {
-    audioRef.current = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3');
-    return () => {
-      if (audioRef.current) {
-        audioRef.current = null;
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!hasBeenClosed) {
-      const timer = setTimeout(() => {
-        setIsOpen(true);
-        if (audioRef.current) {
-          audioRef.current.play().catch(err => console.error('Error playing sound:', err));
-        }
-      }, 3000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [hasBeenClosed]);
 
   useEffect(() => {
     if (isOpen && messages.length === 0) {
@@ -150,13 +124,13 @@ export const ChatBot = () => {
 
           const data = await response.json();
           setMessages([{
-            text: data.greeting || 'Hey! Ask me anything about Amit.',
+            text: data.greeting || "Hey! I'm Veda, Amit's assistant. Ask me anything about his work or experience.",
             isUser: false,
             timestamp: Date.now()
           }]);
         } catch {
           setMessages([{
-            text: "Hey! I'm Amit's assistant. Ask me anything about his work or experience.",
+            text: "Hey! I'm Veda, Amit's assistant. Ask me anything about his work or experience.",
             isUser: false,
             timestamp: Date.now()
           }]);
@@ -306,104 +280,149 @@ export const ChatBot = () => {
 
   const handleClose = () => {
     setIsOpen(false);
-    localStorage.setItem('chatbot_closed', 'true');
-    setHasBeenClosed(true);
   };
 
+  if (!isOpen) {
+    return (
+      <button
+        onClick={() => setIsOpen(true)}
+        className="fixed bottom-5 right-5 z-50 px-4 py-2 text-[14px]"
+        style={{
+          fontFamily: 'var(--sans)',
+          fontWeight: 500,
+          color: '#FFFFFF',
+          background: 'var(--link-soft)',
+          border: '1px solid var(--link-soft)',
+          borderRadius: '6px',
+        }}
+      >
+        Ask about Amit&apos;s work ↗
+      </button>
+    );
+  }
+
   return (
-    <div className="fixed bottom-5 right-5 z-50">
-      {/* Toggle Button */}
-      {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="group w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 hover:scale-105 transition-all duration-200"
-        >
-          <MessageCircle size={24} className="group-hover:scale-110 transition-transform" />
-        </button>
-      )}
-
-      {/* Chat Window */}
-      {isOpen && (
-        <div
-          className="absolute bottom-0 right-0 w-[380px] h-[500px] bg-white rounded-2xl shadow-2xl shadow-black/10 flex flex-col overflow-hidden border border-gray-100"
-          style={{ animation: 'chatSlideUp 0.25s ease-out' }}
-        >
-          {/* Header */}
-          <div className="px-5 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white flex justify-between items-center">
-            <div>
-              <h3 className="font-semibold text-[15px]">Veda</h3>
-              <p className="text-blue-100 text-xs mt-0.5">Amit's AI assistant</p>
-            </div>
-            <button
-              onClick={handleClose}
-              className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
-            >
-              <X size={18} />
-            </button>
-          </div>
-
-          {/* Messages */}
-          <div className="flex-1 px-4 py-3 overflow-y-auto space-y-3 bg-gray-50/50">
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
-              >
-                <div
-                  className={`max-w-[85%] px-3.5 py-2.5 text-[14px] leading-relaxed ${
-                    message.isUser
-                      ? 'bg-blue-500 text-white rounded-2xl rounded-br-md'
-                      : 'bg-white text-gray-700 rounded-2xl rounded-bl-md shadow-sm border border-gray-100'
-                  }`}
-                >
-                  <MessageContent text={message.text} />
-                </div>
-              </div>
-            ))}
-            {isLoading && messages[messages.length - 1]?.text === '' && (
-              <div className="flex justify-start">
-                <div className="bg-white text-gray-400 px-4 py-3 rounded-2xl rounded-bl-md shadow-sm border border-gray-100">
-                  <div className="flex space-x-1.5">
-                    <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                  </div>
-                </div>
-              </div>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Input */}
-          <div className="px-4 py-3 border-t border-gray-100 bg-white">
-            <div className="flex items-center gap-2">
-              <input
-                ref={inputRef}
-                type="text"
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                onKeyDown={handleKeyPress}
-                placeholder="Ask something..."
-                className="flex-1 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-400 focus:bg-white transition-colors placeholder:text-gray-400"
-              />
-              <button
-                onClick={handleSendMessage}
-                disabled={!inputMessage.trim() || isLoading}
-                className="p-2.5 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-colors disabled:opacity-40 disabled:hover:bg-blue-500"
-              >
-                <Send size={16} />
-              </button>
-            </div>
-          </div>
+    <div
+      className="fixed z-50 flex flex-col overflow-hidden"
+      style={{
+        bottom: '20px',
+        right: '20px',
+        width: '340px',
+        height: '480px',
+        background: 'var(--bg)',
+        border: '1px solid var(--hairline)',
+        borderRadius: '6px',
+      }}
+    >
+      {/* Header */}
+      <div
+        className="px-4 py-3 flex justify-between items-center"
+        style={{
+          background: 'var(--link-soft)',
+        }}
+      >
+        <div>
+          <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#FFFFFF' }}>
+            Ask about Amit&apos;s work
+          </h3>
+          <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.75)', marginTop: '2px' }}>
+            Veda, Amit&apos;s AI assistant
+          </p>
         </div>
-      )}
+        <button
+          onClick={handleClose}
+          className="p-1"
+          style={{ color: '#FFFFFF', borderRadius: '4px' }}
+        >
+          <X size={18} />
+        </button>
+      </div>
 
-      <style>{`
-        @keyframes chatSlideUp {
-          from { opacity: 0; transform: translateY(12px) scale(0.97); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-      `}</style>
+      {/* Messages */}
+      <div
+        className="flex-1 px-4 py-3 overflow-y-auto"
+        style={{ background: 'var(--bg)' }}
+      >
+        {messages.map((message, index) => (
+          <div
+            key={index}
+            className="flex"
+            style={{ justifyContent: message.isUser ? 'flex-end' : 'flex-start' }}
+          >
+            <div
+              className="text-[14px] leading-relaxed"
+              style={{
+                maxWidth: '85%',
+                padding: message.isUser ? '8px 12px' : '8px 0',
+                marginBottom: '12px',
+                background: message.isUser ? '#ECEAE5' : 'transparent',
+                color: 'var(--ink)',
+                borderRadius: message.isUser ? '6px' : '0',
+              }}
+            >
+              <MessageContent text={message.text} />
+            </div>
+          </div>
+        ))}
+        {isLoading && messages[messages.length - 1]?.text === '' && (
+          <div className="flex" style={{ justifyContent: 'flex-start' }}>
+            <div
+              className="text-[14px] leading-relaxed"
+              style={{
+                maxWidth: '85%',
+                padding: '8px 12px',
+                marginBottom: '12px',
+                background: 'transparent',
+                color: 'var(--muted)',
+                borderRadius: '6px',
+              }}
+            >
+              &hellip;
+            </div>
+          </div>
+        )}
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* Input */}
+      <div
+        className="px-3 py-3 flex items-center gap-2"
+        style={{
+          borderTop: '1px solid var(--hairline)',
+          background: 'var(--bg)',
+        }}
+      >
+        <input
+          ref={inputRef}
+          type="text"
+          value={inputMessage}
+          onChange={(e) => setInputMessage(e.target.value)}
+          onKeyDown={handleKeyPress}
+          placeholder="Ask something..."
+          className="flex-1 px-3 py-2 text-sm"
+          style={{
+            fontFamily: 'var(--sans)',
+            background: 'transparent',
+            border: '1px solid var(--hairline)',
+            borderRadius: '6px',
+            color: 'var(--ink)',
+            outline: 'none',
+          }}
+        />
+        <button
+          onClick={handleSendMessage}
+          disabled={!inputMessage.trim() || isLoading}
+          className="p-2"
+          style={{
+            background: 'var(--ink)',
+            color: 'var(--bg)',
+            borderRadius: '6px',
+            opacity: !inputMessage.trim() || isLoading ? 0.4 : 1,
+          }}
+        >
+          <Send size={16} />
+        </button>
+      </div>
     </div>
   );
 };
